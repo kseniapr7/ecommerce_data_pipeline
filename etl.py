@@ -1,17 +1,22 @@
 import csv 
 import psycopg2
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 conn = psycopg2.connect(
-    dbname="ecommerce_dwh",
-    user="postgres",
-    password="minsk2026",
-    host="localhost",
-    port="5432"
+    dbname=os.getenv("DB_NAME"),
+    user=os.getenv("DB_USER"),
+    password=os.getenv("DB_PASSWORD"),
+    host=os.getenv("DB_HOST"),
+    port=os.getenv("DB_PORT")
 )
 
 cursor = conn.cursor()
 
-with open("raw_sales.csv", mode="r", encoding="utf-8", newline="") as file:
+file_path = os.path.join(os.path.dirname(__file__), "raw_sales.csv")
+with open(file_path, mode="r", encoding="utf-8", newline="") as file:
     reader = csv.DictReader(file)
     data = list(reader)
 
